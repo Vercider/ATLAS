@@ -17,7 +17,7 @@ class InventoryResponse(BaseModel):
     quantity: int
     price: float
     category: str
-    last_updated = datetime
+    last_updated : datetime
 
     class Config:
         from_attributes = True
@@ -29,8 +29,8 @@ class SupplierCreate(BaseModel):
     name: str
     delivery_reliability: float
     avg_delivery_days: float
-    price_level = float
-    quality_score = float
+    price_level : float
+    quality_score : float
 
 # === 2.2 SCHEMA FÜR DIE API-ANTWORT ===
 class SupplierResponse(BaseModel):
