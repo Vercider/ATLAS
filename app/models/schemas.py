@@ -6,7 +6,7 @@ from datetime import datetime
 # === 1.1 SCHEMA ANLAGE DES INVENTORY-EINTRAGS ===
 class InventoryCreate(BaseModel):
     product_name: str
-    quantitiy: int
+    quantity: int
     price: float
     category: str
 
