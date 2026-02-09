@@ -1,0 +1,17 @@
+# === CONTROLLER (FastAPI) ===
+FastAPI
+uvicorn
+
+# === MODEL (Datenbank und Validierung) ===
+sqlalchemy
+pydantic
+
+# === VIEW (Dashboard) ===
+streamlit
+plotly
+requests
+
+# === SERVICES (ML & Daten) ===
+scikit-learn
+pandas
+numpy
