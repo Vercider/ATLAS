@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, DateTime
 from sqlalchemy.sql import func
 from .database import Base
 
-# === TABELLE: LAGERBESTAND ===
+# === 1.TABELLE: LAGERBESTAND ===
 class Inventory(Base):
     __tablename__ = "Lagerbestand"
 
@@ -13,7 +13,7 @@ class Inventory(Base):
     category = Column(String(50), nullable=False)
     last_updated= Column(DateTime, server_default=func.now())
 
-# === TABELLE: LIEFERANTEN ===
+# === 2.TABELLE: LIEFERANTEN ===
 class Supplier(Base):
     __tablename__ = "Lieferanten"
 
