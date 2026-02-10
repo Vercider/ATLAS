@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
+import base64
+import os
 
 # === Konfiguration ===
 API_BASE_URL = "http://localhost:8000"
@@ -12,6 +14,38 @@ st.set_page_config(
     page_icon = "🛰️",
     layout = "wide"
 )
+
+# === Hintergrundbild ===
+def set_background(image_path):
+    """Lädt ein Bild und setzt es als Hintergrund via CSS."""
+    with open(image_path, "rb") as f:
+        img_data = base64.b64encode(f.read()).decode()
+
+    st.markdown(f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64, {img_data}");
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+        }}
+        .stApp > header {{
+            background-color: transparent;
+        }}
+        .block-container {{
+            background-color: rgba(14, 17, 23, 0.85);
+            border-radius: 10px;
+            padding: 2rem;
+        }}
+        [data-testid="stSidebar"] {{
+            background-color: rgba(14, 17, 23, 0.90);
+        }}
+        </style>
+    """, unsafe_allow_html=True)
+
+bg_path = os.path.join(os.path.dirname(__file__), "assets", "atlas_bg.png")
+if os.path.exists(bg_path):
+    set_background(bg_path)
 
 # === Titel ===
 st.title("🛰️ A.T.L.A.S.")
