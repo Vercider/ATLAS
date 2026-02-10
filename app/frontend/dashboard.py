@@ -27,8 +27,7 @@ page = st.sidebar.radio(
 # === Seiten-Logik ===
 if page == "Dashboard":
     st.header("📊 Übersicht")
-    st.write("Hier kommt die Übersicht hin")
-
+    
     # Daten von der API laden
     inventory_response = requests.get(f"{API_BASE_URL}/api/inventory/")
     supplier_response = requests.get(f"{API_BASE_URL}/api/suppliers/")
@@ -68,11 +67,7 @@ elif page == "Anomalieerkennung":
     st.divider()
 
     # Scatter-Plot: Alle Produkte visualisieren
-    st.subheader("scatter-Plot: Quantity vs. Price")
-
-    all_items = result["anomalies"] + [
-        item for item in pd.DataFrame(result["anomalies"]).to_dict("records")
-    ] if result["anomalies"] else []
+    st.subheader("Scatter-Plot: Quantity vs. Price")
 
     # Alle Daten nochmal von der API holen für den Plot
     inv_response = requests.get(f"{API_BASE_URL}/api/inventory/")
@@ -114,7 +109,7 @@ elif page == "Anomalieerkennung":
 elif page == "Lieferanten-Cluster":
     st.header("🏷️ Lieferanten-Cluster")
     
-    # ML-Ergebnsse von der API laden
+    # ML-Ergebnisse von der API laden
     response = requests.get(f"{API_BASE_URL}/api/ml/clusters")
     result = response.json()
 
@@ -137,19 +132,19 @@ elif page == "Lieferanten-Cluster":
     for cluster_id, stats in result["cluster_stats"].items():
         cluster_name = cluster_names.get(int(cluster_id), f"Cluster {cluster_id}")
 
-        with st.expander(f"{cluster_name} - {stats["count"]} Liefranten"):
+        with st.expander(f"{cluster_name} - {stats['count']} Lieferanten"):
             # Durchschnittswerte anzeigen
             avg = stats["avg_values"]
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
-                st.metric("Zuverlässigkeit", f"{avg["delivery_reliability"]:.1%}")
+                st.metric("Zuverlässigkeit", f"{avg['delivery_reliability']:.1%}")
             with col2:
-                st.metric("Ø Liefertage", f"{avg["avg_delivery_days"]:.1f}")
+                st.metric("Ø Liefertage", f"{avg['avg_delivery_days']:.1f}")
             with col3:
-                st.metric("Preisniveau", f"{avg["price_level"]:.1%}")
+                st.metric("Preisniveau", f"{avg['price_level']:.1%}")
             with col4:
-                st.metric("Qualität", f"{avg["quality_score"]:.1%}")
+                st.metric("Qualität", f"{avg['quality_score']:.1%}")
 
             # Mitglieder als Tabelle
             if stats["members"]:
@@ -159,24 +154,42 @@ elif page == "Lieferanten-Cluster":
     # Trennlinie
     st.divider()
 
-    # Scatter-Plot: Alle Lieferanten visualisieren
-    st.subheader("Scatter-Plot: Zuverlässigkeit vs. Liefertage")
+    # Zwei Scatter-Plots nebeneinander
+    st.subheader("Scatter-Plots: Lieferanten-Analyse")
 
     all_suppliers = pd.DataFrame(result["all_suppliers"])
     all_suppliers["Cluster"] = all_suppliers["cluster"].map(cluster_names)
 
-    fig = px.scatter(
-        all_suppliers,
-        x = "avg_delivery_days",
-        y = "delivery_reliability",
-        color = "Cluster",
-        hover_data = ["name", "price_level", "quality_score"],
-        color_discrete_map = {
-            "⭐ Premium": "#2ecc71",
-            "📦 Standard": "#3498db",
-            "⚠️ Risiko": "#e74c3c"
-        },
-        title = " Liefranten: Liefertage vs. Zuverlässigkeit" 
-    )
+    chart_col1, chart_col2 = st.columns(2)
 
-    st.plotly_chart(fig, use_container_width = True)
+    with chart_col1:
+        fig1 = px.scatter(
+            all_suppliers,
+            x="avg_delivery_days",
+            y="delivery_reliability",
+            color="Cluster",
+            hover_data=["name"],
+            color_discrete_map={
+                "⭐ Premium": "#2ecc71",
+                "📦 Standard": "#3498db",
+                "⚠️ Risiko": "#e74c3c"
+            },
+            title="Liefertage vs. Zuverlässigkeit"
+        )
+        st.plotly_chart(fig1, use_container_width=True)
+
+    with chart_col2:
+        fig2 = px.scatter(
+            all_suppliers,
+            x="price_level",
+            y="quality_score",
+            color="Cluster",
+            hover_data=["name"],
+            color_discrete_map={
+                "⭐ Premium": "#2ecc71",
+                "📦 Standard": "#3498db",
+                "⚠️ Risiko": "#e74c3c"
+            },
+            title="Preisniveau vs. Qualität"
+        )
+        st.plotly_chart(fig2, use_container_width=True)
