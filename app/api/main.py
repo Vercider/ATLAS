@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.models.database import engine, Base
 from app.api.endpoints.inventory import router as inventory_router
 from app.api.endpoints.suppliers import router as supplier_router
+from app.api.endpoints.ml import router as ml_router
 
 # === 1.TABELLEN ERSCHAFFEN (FALLS NICHT VORHANDEN) ===
 Base.metadata.create_all(bind=engine)
@@ -16,6 +17,7 @@ app = FastAPI(
 # === 3.INVENTORY-ROUTER EINBINDUNG ===
 app.include_router(inventory_router)
 app.include_router(supplier_router)
+app.include_router(ml_router)
 
 # === 4.TEST-ENDPUNKT ===
 @app.get("/")
