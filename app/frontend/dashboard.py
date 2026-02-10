@@ -24,21 +24,23 @@ def set_background(image_path):
     st.markdown(f"""
         <style>
         .stApp {{
-            background-image: url("data:image/png;base64, {img_data}");
-            background-size: cover;
-            background-position: center top;
+            background-image: url("data:image/png;base64,{img_data}");
+            background-size: 65%;
+            background-position: top center;
             background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: #0e1117;
         }}
         .stApp > header {{
             background-color: transparent;
         }}
         .block-container {{
-            background-color: rgba(14, 17, 23, 0.85);
+            background-color: rgba(14, 17, 23, 0.88);
             border-radius: 10px;
             padding: 2rem;
         }}
         [data-testid="stSidebar"] {{
-            background-color: rgba(14, 17, 23, 0.90);
+            background-color: rgba(14, 17, 23, 0.95);
         }}
         </style>
     """, unsafe_allow_html=True)
