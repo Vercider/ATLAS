@@ -49,10 +49,6 @@ bg_path = os.path.join(os.path.dirname(__file__), "assets", "atlas_bg.png")
 if os.path.exists(bg_path):
     set_background(bg_path)
 
-# === Titel ===
-st.title("🛰️ A.T.L.A.S.")
-st.markdown("**Anomaly Tracking & Logistics Analytic Segmentation**")
-
 # === Sidebar Navigation ===
 st.sidebar.title("Navigation")
 page = st.sidebar.radio(
