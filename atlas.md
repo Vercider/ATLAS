@@ -28,3 +28,21 @@ Du bist ein erfahrener Senior-Entwickler und Data Scientist. Deine Aufgabe ist e
   /models    # DB-Schemata & Pydantic
   /frontend  # Streamlit Dashboard
 /scripts     # Data Seeding & Skripte
+
+## 🔮 Geplante Features (Phase 2)
+
+### MLOps-Lifecycle (rudimentär)
+- **Model Manager** (`app/services/model_manager.py`)
+  - Modelle speichern mit `joblib` statt bei jedem Aufruf neu zu trainieren
+  - Modelle laden und wiederverwenden
+  - Schwellwert-basiertes Re-Training ("Silhouette Score < 0.5? → Neu trainieren")
+- **Retrain-Endpunkt** (`/api/ml/retrain`)
+  - Manueller Trigger zum Neu-Trainieren über API oder Dashboard
+- **Saved Models Ordner** (`models/saved/`)
+  - `isolation_forest.joblib`
+  - `kmeans.joblib`
+- **Metriken-Tracking**
+  - Silhouette Score für K-Means
+  - Precision/Recall für Isolation Forest (mit menschlichem Feedback)
+
+> Wird implementiert sobald das Grundsystem (API + ML + Dashboard) steht.
