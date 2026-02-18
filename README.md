@@ -195,9 +195,7 @@ ATLAS/
 - [x] Streamlit Dashboard mit Plotly-Charts
 - [x] Ein-Klick-Startskript
 - [ ] MLOps-Lifecycle (Model Monitoring, Re-Training)
-- [ ] Docker Deployment
-- [ ] PostgreSQL statt SQLite
-- [ ] Unit Tests + Integration Tests
+- [ ] Option mehr Grunddaten zu generieren um System auf größe Datenmengen zu testen
 
 ---
 
