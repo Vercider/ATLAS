@@ -85,6 +85,19 @@ def create_supplier(is_anomaly = False):
             quality_score = round(random.uniform(0.6, 0.98), 2)
         )
 
+def generate_products(amount = 500, share_anomalies = 0.05):
+    """Erzeugt eine LIste von Produkt-Objekten (ohne DB-Zugriff)"""
+    amount_anomalies = int(amount * share_anomalies)
+    amount_normal = amount - amount_anomalies
+
+    products = []
+    for _ in range(amount_normal):
+        products.append(create_normal_product())
+    for _ in range(amount_anomalies):
+        products.append(create_normal_product())
+
+    return products
+
 def seed():
     """HAUPTFUNKTION: Füllt die Datenbank mit Testdaten."""
     db = SessionLocal()
