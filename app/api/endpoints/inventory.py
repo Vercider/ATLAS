@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_db
-from app.models.orm_models import Inventory
+from app.models.orm_models import Inventory, Supplier
 from app.models.schemas import InventoryCreate, InventoryResponse
+from scripts.seed_data import add_data
 
 # === 1. ROUTER STATT APP INITIALISIERUNG ===
 router = APIRouter(
@@ -39,3 +40,23 @@ def get_inventory_item(item_id: int, db: Session = Depends(get_db)):
     if not item:
         raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
     return item
+
+# === 2.4 EXTENDED SEED - Datenbank um 500 Produkte und 50 Lieferanten erhöht ===
+@router.post("/seed")
+def sedd_more_data(db: Session = Depends(get_db)):
+    products_before = db.query(Inventory).count()
+    suppliers_before = db.query(Supplier).count()
+
+    result = add_data(db)
+
+    products_after = db.query(Inventory).count()
+    suppliers_after = db.query(Supplier).count()
+
+    return {
+        "Hinzugefügte Produkte": result["Produkte"],
+        "Hinzugefügte Lieferanten": result["Lieferanten"],
+        "Gesamt Produkte vorher": products_before,
+        "Gesamt Produkte nachher": products_after,
+        "Gesamt Lieferanten vorher": suppliers_before,
+        "Gesamt Lieferanten nachher": suppliers_after
+    }
