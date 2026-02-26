@@ -113,14 +113,22 @@ def generate_suppliers(amount = 50, share_anomalies = 0.05):
 
 def add_data(db, amount_products = 500, amount_suppliers = 50):
     """Fügt neue Produkte und Liefranten der DB hinzu (ohne Löschen)."""
-    products = generate_products(amount_products)
-    suppliers = generate_suppliers(amount_suppliers)
+
+    # Zufällige Anomalierate zwischen 2% und 8%
+    random_anomaly_rate = round(random.uniform(0.02, 0.08), 2)
+
+    products = generate_products(amount_products, random_anomaly_rate)
+    suppliers = generate_suppliers(amount_suppliers, random_anomaly_rate)
 
     db.add_all(products)
     db.add_all(suppliers)
     db.commit()
 
-    return {"Produkte": len(products), "Lieferanten": len(suppliers)}
+    return {
+        "Produkte": len(products),
+        "Lieferanten": len(suppliers),
+        "Anomalie_Rate": random_anomaly_rate
+    }
 
 def seed():
     """HAUPTFUNKTION: Füllt die Datenbank mit Testdaten."""

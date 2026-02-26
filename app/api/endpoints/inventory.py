@@ -55,6 +55,7 @@ def seed_more_data(db: Session = Depends(get_db)):
     return {
         "Hinzugefügte Produkte": result["Produkte"],
         "Hinzugefügte Lieferanten": result["Lieferanten"],
+        "Anomalie Rate": f"{result['Anomalie_Rate'] * 100:.0f}%",
         "Produkte vorher": products_before,
         "Produkte nachher": products_after,
         "Lieferanten vorher": suppliers_before,

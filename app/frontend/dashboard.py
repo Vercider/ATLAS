@@ -93,7 +93,8 @@ if page == "Dashboard":
         st.success(
             f"✅ Erfolgreich hinzugefügt: "
             f"{result['Hinzugefügte Produkte']} Produkte, "
-            f"{result['Hinzugefügte Lieferanten']} Lieferanten"
+            f"{result['Hinzugefügte Lieferanten']} Lieferanten "
+            f"(Anomalie-Rate: {result['Anomalie Rate']})"
         )
 
         col_before, col_after = st.columns(2)
@@ -312,7 +313,7 @@ elif page == "MLOps Monitoring":
         with col_a:
             st.metric("📦 Produkte geprüft", result["anomaly_detection"]["total_products"])
             st.metric("🔍 Anomalien gefunden", result["anomaly_detection"]["anomalies_found"])
-            st.metric("📈 Anomalie-Rate", f"{result['anomaly_detection']['anomaly_ratio'] * 100:.1f}")
+            st.metric("📈 Anomalie-Rate", f"{result['anomaly_detection']['anomaly_ratio'] * 100:.1f}%")
         with col_b:
             st.metric("🚚 Lieferanten geprüft", result["clustering"]["total_suppliers"])
             st.metric("📦 Cluster", result["clustering"]["n_clusters"])
