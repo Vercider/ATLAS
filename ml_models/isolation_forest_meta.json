@@ -1,6 +1,6 @@
 {
     "model_name": "isolation_forest",
-    "gespeichert_am": "2026-02-26T09:49:39.571249",
+    "gespeichert_am": "2026-02-26T16:03:08.843529",
     "model_pfad": "c:\\Users\\Andreas Lerke\\Desktop\\Projekte\\ATLAS\\ml_models\\isolation_forest.joblib",
     "anzahl_datenpunkte": 1500,
     "contamination": 0.05,

@@ -1,6 +1,6 @@
 {
     "model_name": "kmeans_clustering",
-    "gespeichert_am": "2026-02-26T09:50:00.947281",
+    "gespeichert_am": "2026-02-26T16:03:11.446128",
     "model_pfad": "c:\\Users\\Andreas Lerke\\Desktop\\Projekte\\ATLAS\\ml_models\\kmeans_clustering.joblib",
     "anzahl_lieferanten": 150,
     "n_clusters": 3,

@@ -45,7 +45,7 @@ def retrain_models(db: Session = Depends(get_db)):
 
     return {
         "message": "Modelle erfolgreich neu trainiert!",
-        "anomalien_gefunden": anomaly_result["anomaly_count"],
+        "anomalien_gefunden": anomaly_result["total_anomalies"],
         "cluster_erstellt": cluster_result["n_clusters"]
     }
 

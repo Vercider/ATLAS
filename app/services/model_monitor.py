@@ -53,7 +53,7 @@ def evaluate_models(db:Session):
     # Anomalie-Ergebnisse holen
     anomaly_result = detect_anomalies(db)
     total_products = anomaly_result["total_items"]
-    anomalies_found = anomaly_result["anomaly_count"]
+    anomalies_found = anomaly_result["total_anomalies"]
     anomaly_ratio = anomalies_found / total_products if total_products > 0 else 0
 
     # Cluster-Ergebnisse holen

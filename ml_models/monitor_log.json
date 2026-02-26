@@ -1,0 +1,14 @@
+[
+    {
+        "timestamp": "2026-02-26T16:02:52.934939",
+        "anomaly_detection": {
+            "total_products": 1500,
+            "anomalies_found": 75,
+            "anomaly_ratio": 0.05
+        },
+        "clustering": {
+            "total_suppliers": 150,
+            "n_clusters": 3
+        }
+    }
+]
