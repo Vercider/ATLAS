@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.ensemble import IsolationForest
 from sqlalchemy.orm import Session
 
@@ -52,12 +53,22 @@ def detect_anomalies(db: Session) -> dict:
         save_model(model, "isolation_forest", {
             "anzahl_datenpunkte": len(df),
             "contamination": CONTAMINATION,
-            "features": FEATURE_COLUMNS
+            "features": FEATURE_COLUMNS,
+            "mean_score": round(float(model.decision_function(features).mean()), 4)
         })
 
-    # === 4. Vorhersage treffen ===
+    # === 4. Vorhersage treffen und Statistiken berechnen ===
     df["anomaly_score"] = model.decision_function(features)
     df["is_anomaly"] = model.predict(features)
+
+    scores = df["anomaly_score"]
+    score_stats = {
+        "mean": round(float(scores.mean()), 4),
+        "std": round(float(scores.std()), 4),
+        "min": round(float(scores.min()), 4),
+        "max": round(float(scores.max()), 4),
+        "median": round(float(scores.median()), 4)
+    }
 
     # === 5. Ergebnisse aufbereiten ===
     anomalies = df[df["is_anomaly"] == -1 ].to_dict(orient = "records")
@@ -67,6 +78,7 @@ def detect_anomalies(db: Session) -> dict:
         "total_items": len(df),
         "total_anomalies": len(anomalies),
         "anomaly_percentage": round(len(anomalies) / len(df) * 100, 2),
+        "score_stats": score_stats,
         "anomalies": anomalies,
         "normal_items": len(normal),
         "model_params": {
