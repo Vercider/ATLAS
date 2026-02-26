@@ -1,6 +1,6 @@
 {
     "model_name": "kmeans_clustering",
-    "gespeichert_am": "2026-02-26T16:35:17.753453",
+    "gespeichert_am": "2026-02-26T23:31:49.917743",
     "model_pfad": "c:\\Users\\Andreas Lerke\\Desktop\\Projekte\\ATLAS\\ml_models\\kmeans_clustering.joblib",
     "anzahl_lieferanten": 200,
     "n_clusters": 3,
@@ -9,5 +9,6 @@
         "avg_delivery_days",
         "price_level",
         "quality_score"
-    ]
+    ],
+    "silhouette_score": 0.3567
 }

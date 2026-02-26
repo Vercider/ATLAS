@@ -34,5 +34,47 @@
             "total_suppliers": 200,
             "n_clusters": 3
         }
+    },
+    {
+        "timestamp": "2026-02-26T23:31:10.556093",
+        "anomaly_detection": {
+            "total_products": 2000,
+            "anomalies_found": 100,
+            "anomaly_ratio": 0.05,
+            "score_stats": {
+                "mean": 0.0744,
+                "std": 0.0596,
+                "min": -0.2868,
+                "max": 0.1272,
+                "median": 0.0903
+            },
+            "anomaly_percentage": 5.0
+        },
+        "clustering": {
+            "total_suppliers": 200,
+            "n_clusters": 3,
+            "silhouette_score": 0.3567
+        }
+    },
+    {
+        "timestamp": "2026-02-26T23:31:56.725874",
+        "anomaly_detection": {
+            "total_products": 2000,
+            "anomalies_found": 100,
+            "anomaly_ratio": 0.05,
+            "score_stats": {
+                "mean": 0.0744,
+                "std": 0.0596,
+                "min": -0.2868,
+                "max": 0.1272,
+                "median": 0.0903
+            },
+            "anomaly_percentage": 5.0
+        },
+        "clustering": {
+            "total_suppliers": 200,
+            "n_clusters": 3,
+            "silhouette_score": 0.3567
+        }
     }
 ]

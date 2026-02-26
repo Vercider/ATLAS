@@ -277,6 +277,8 @@ elif page == "MLOps Monitoring":
             st.success("Trainiert ✅")
             st.write(f"📅 Gespeichert am: {meta['gespeichert_am'][:10]}")
             st.write(f"📊 Datenpunkte: {meta['anzahl_datenpunkte']}")
+            if "mean_score" in meta:
+                st.write(f"📈 Mean Score: {meta['mean_score']}")
     
     with col2:
         st.subheader("📦 K-Means Clustering")
@@ -287,6 +289,8 @@ elif page == "MLOps Monitoring":
             st.success("Trainiert ✅")
             st.write(f"📅 Gespeichert am: {meta['gespeichert_am'][:10]}")
             st.write(f"📊 Lieferanten: {meta['anzahl_lieferanten']}")
+            if "silhouette_score" in meta:
+                st.write(f"📈 Silhouette Score: {meta['silhouette_score']}")
 
     # === Retrain Button ===
     st.divider()
@@ -309,11 +313,38 @@ elif page == "MLOps Monitoring":
         result = eval_response.json()
 
         st.success("✅ Evaluation abgeschlossen!")
+
         col_a, col_b = st.columns(2)
+
         with col_a:
+            st.markdown("### 🔍 Anomalieerkennung")
             st.metric("📦 Produkte geprüft", result["anomaly_detection"]["total_products"])
             st.metric("🔍 Anomalien gefunden", result["anomaly_detection"]["anomalies_found"])
             st.metric("📈 Anomalie-Rate", f"{result['anomaly_detection']['anomaly_ratio'] * 100:.1f}%")
+
+            # Score Statistiken
+            stats = result["anomaly_detection"]["score_stats"]
+            st.markdown("**Score Statistiken:**")
+            st.write(f"• Mean: {stats['mean']}")
+            st.write(f"• Std: {stats['std']}")
+            st.write(f"• Min: {stats['min']} (stärkste Anomalie)")
+            st.write(f"• Max: {stats['max']} (normalster Punkte)")
+            st.write(f"• Median: {stats['median']}")
+
         with col_b:
+            st.markdown("### 📦 Clustering")
             st.metric("🚚 Lieferanten geprüft", result["clustering"]["total_suppliers"])
             st.metric("📦 Cluster", result["clustering"]["n_clusters"])
+
+            # Silhouette Score mit bewertung
+            sil_score = result["clustering"]["silhouette_score"]
+            st.metric("📈 Silhouette Score", round(sil_score, 4))
+
+            if sil_score >= 0.7:
+                st.success("🟢 Exzellente Cluster-Trennung!")
+            elif sil_score >= 0.5:
+                st.info("🔵 Gute Cluster-Trennung")
+            elif sil_score >= 0.25:
+                st.warning("🟡 Mittelmäßig - Retrain empfohlen")
+            else:
+                st.error("🔴 Schlechte Trennung - Retrain nötig!")
