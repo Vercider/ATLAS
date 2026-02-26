@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
 from sqlalchemy.orm import Session
 
 from app.models.orm_models import Supplier
@@ -55,11 +56,14 @@ def cluster_suppliers(db: Session) -> dict:
         save_model(model, "kmeans_clustering", {
             "anzahl_lieferanten": len(df),
             "n_clusters": N_CLUSTERS,
-            "features": FEATURE_COLUMNS
+            "features": FEATURE_COLUMNS,
+            "silhouette_score": round(silhouette_score(features_scaled, model.labels_), 4)
         })
 
-    # === 4. CLuster-Labels zuweisen ===
+    # === 4. CLuster-Labels zuweisen und Silhouette berechnen ===
     df["cluster"] = model.predict(features_scaled)
+
+    sil_score = silhouette_score(features_scaled, df["cluster"])
 
     # === 5. Cluster-Statistiken berechnen ===
     cluster_stats = {}
@@ -80,6 +84,7 @@ def cluster_suppliers(db: Session) -> dict:
     return {
         "total_suppliers": len(df),
         "n_clusters": N_CLUSTERS,
+        "silhouette_score": round(sil_score, 4),
         "cluster_stats": cluster_stats,
         "all_suppliers": df.to_dict(orient="records"),
         "model_params": {
