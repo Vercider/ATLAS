@@ -2,6 +2,22 @@ import subprocess
 import time
 import sys
 import os
+import requests
+
+def wait_for_api(url="http://127.0.0.1:8000/api/inventory/", timeout=15):
+    """Wartet bis die API erreichbar ist."""
+    print("⏳ Warte auf API...")
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            response = requests.get(url, timeout=2)
+            if response.status_code == 200:
+                print("✅ API ist bereit!")
+                return True
+        except requests.exceptions.ConnectionError:
+            time.sleep(1)
+    print("⚠️ API nicht erreichbar nach Timeout!")
+    return False
 
 def main():
     """Startet FastAPI und Streamlit gleichzeitig."""
@@ -17,8 +33,13 @@ def main():
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )
 
-    # Warte bis API bereit ist
-    time.sleep(3)
+    # Warte bis API wirklich bereit ist
+    api_ready = wait_for_api()
+
+    if not api_ready:
+        print("❌ API konnte nicht gestartet werden. Abbruch.")
+        api_process.terminate()
+        return
 
     # === 2. Streamlit starten ===
     print("📊 Starte Streamlit Dashboard auf Port 8501...")
