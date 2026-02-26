@@ -3,9 +3,8 @@ from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_db
 from app.services.anomaly_detection import detect_anomalies
-from app.services.clustering import cluster_suppliers
-from app.services.model_manager import model_exists
 from app.services.model_monitor import get_model_status, evaluate_models
+from app.services.clustering import cluster_suppliers, find_optimal_clusters
 
 import os
 
@@ -59,4 +58,10 @@ def get_status():
 @router.post("/evaluate")
 def evaluate(db: Session = Depends(get_db)):
     """Evaluiert beide Modelle und spiechert Ergebnisse im Log."""
-    return evaluate_models(db) 
+    return evaluate_models(db)
+
+# === 6. Optimale Cluster-Anzahl finden ===
+@router.get("/optimize-clusters")
+def optimize_clusters(db: Session = Depends(get_db)):
+    """Testet verschiedene Cluster-Anzahlen und empfiehlt die Optimale."""
+    return find_optimal_clusters(db) 
