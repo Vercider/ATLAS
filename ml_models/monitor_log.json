@@ -10,5 +10,29 @@
             "total_suppliers": 150,
             "n_clusters": 3
         }
+    },
+    {
+        "timestamp": "2026-02-26T16:34:39.723769",
+        "anomaly_detection": {
+            "total_products": 2000,
+            "anomalies_found": 108,
+            "anomaly_ratio": 0.054
+        },
+        "clustering": {
+            "total_suppliers": 200,
+            "n_clusters": 3
+        }
+    },
+    {
+        "timestamp": "2026-02-26T16:35:26.990879",
+        "anomaly_detection": {
+            "total_products": 2000,
+            "anomalies_found": 100,
+            "anomaly_ratio": 0.05
+        },
+        "clustering": {
+            "total_suppliers": 200,
+            "n_clusters": 3
+        }
     }
 ]
