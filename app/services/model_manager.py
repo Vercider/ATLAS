@@ -44,3 +44,15 @@ def load_model(model_name):
         return None
     
     return joblib.load(model_path)
+
+# === 4. Metadaten laden ===
+def load_metadata(model_name):
+    """Lädt die Metadaten eines gespeicherten Modells. Gibt None zurück falls nicht vorhanden."""
+
+    meta_path = os.path.join(MODEL_DIR, f"{model_name}_meta.json")
+
+    if not os.path.exists(meta_path):
+        return None
+    
+    with open(meta_path, "r") as f:
+        return json.load(f)
