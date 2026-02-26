@@ -59,12 +59,16 @@ page = st.sidebar.radio(
 # === Seiten-Logik ===
 if page == "Dashboard":
     st.header("📊 Übersicht")
-    
-    # Daten von der API laden
-    inventory_response = requests.get(f"{API_BASE_URL}/api/inventory/")
+
+    try:
+        inventory_response = requests.get(f"{API_BASE_URL}/api/inventory/")
+        inventory_data = inventory_response.json()
+    except requests.exceptions.ConnectionError:
+        st.error("⚠️ API nicht erreichbar! Bitte zuerst FastAPI starten.")
+        st.stop()
+
     supplier_response = requests.get(f"{API_BASE_URL}/api/suppliers/")
 
-    inventory_data = inventory_response.json()
     supplier_data = supplier_response.json()
 
     # Drei Kennzahlen nebeneinander
