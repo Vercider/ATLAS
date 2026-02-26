@@ -251,3 +251,68 @@ elif page == "Lieferanten-Cluster":
             title="Preisniveau vs. Qualität"
         )
         st.plotly_chart(fig2, use_container_width=True)
+
+elif page == "MLOps Monitoring":
+    st.header("🔬 MLOps Monitoring")
+
+
+    # === Modell-Status laden ===
+    try:
+        status_response = requests.get(f"{API_BASE_URL}/api/ml/status")
+        status_data = status_response.json()
+    except requests.exceptions.ConnectionError:
+        st.error("⚠️ API nicht erreichbar!")
+        st.stop()
+
+    # === Status beider Modelle anzeigen ===
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("🔍 Isolation Forest")
+        if "status" in status_data["isolation_forest"]:
+            st.warning("Nicht trainiert")
+        else:
+            meta = status_data["isolation_forest"]
+            st.success("Trainiert ✅")
+            st.write(f"📅 Gespeichert am: {meta['gespeichert_am'][:10]}")
+            st.write(f"📊 Datenpunkte: {meta['anzahl_datenpunkte']}")
+    
+    with col2:
+        st.subheader("📦 K-Means Clustering")
+        if "status" in status_data["kmeans_clustering"]:
+            st.warning("Nicht trainiert")
+        else:
+            meta = status_data["kmeans_clustering"]
+            st.success("Trainiert ✅")
+            st.write(f"📅 Gespeichert am: {meta['gespeichert_am'][:10]}")
+            st.write(f"📊 Lieferanten: {meta['anzahl_lieferanten']}")
+
+    # === Retrain Button ===
+    st.divider()
+    st.subheader("🔄 Modelle neu trainieren")
+
+    if st.button("🔄 Retrain starten"):
+        retrain_response = requests.post(f"{API_BASE_URL}/api/ml/retrain")
+        result = retrain_response.json()
+
+        st.success(f"✅ {result['message']}")
+        st.write(f"🔍 Anomalien gefunden: {result['anomalien_gefunden']}")
+        st.write(f"📦 Cluster erstellt: {result['cluster_erstellt']}")
+
+    # === Evaluate Button ===
+    st.divider()
+    st.subheader("📊 Modelle evaluieren")
+
+    if st.button("📊 Evaluation starten"):
+        eval_response = requests.post(f"{API_BASE_URL}/api/ml/evaluate")
+        result = eval_response.json()
+
+        st.success("✅ Evaluation abgeschlossen!")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.metric("📦 Produkte geprüft", result["anomaly_detection"]["total_products"])
+            st.metric("🔍 Anomalien gefunden", result["anomaly_detection"]["anomalies_found"])
+            st.metric("📈 Anomalie-Rate", f"{result['anomaly_detection']['anomaly_ratio'] * 100:.1f}")
+        with col_b:
+            st.metric("🚚 Lieferanten geprüft", result["clustering"]["total_suppliers"])
+            st.metric("📦 Cluster", result["clustering"]["n_clusters"])
