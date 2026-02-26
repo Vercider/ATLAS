@@ -56,3 +56,10 @@ def load_metadata(model_name):
     
     with open(meta_path, "r") as f:
         return json.load(f)
+    
+# === 5. Prüfung ob Modell existiert ===
+def model_exists(model_name):
+    """Prüft ob ein gespeichertes Modell vorhanden ist."""
+
+    model_path = os.path.join(MODEL_DIR, f"{model_name}.joblib")
+    return os.path.exists(model_path)
