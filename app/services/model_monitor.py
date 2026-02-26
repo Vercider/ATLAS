@@ -23,3 +23,58 @@ def get_model_status():
         "isolation_forest": anomaly_meta if anomaly_meta else {"status": "Nicht trainiert"},
         "kmeans_clustering": cluster_meta if cluster_meta else {"status": "Nicht trainiert"}
     }
+
+# === 3. Log-Eintrag speichern (intern) ===
+def _save_log_entry(entry):
+    """Speichert einen Eintrag in die Monitor-Log Datei."""
+
+    os.makedirs(MONITOR_DIR, exist_ok = True)
+
+    # Bestehende Logs laden oder leere Liste
+    if os.path.exists(MONITOR_LOG):
+        with open(MONITOR_LOG, "r") as f:
+            logs = json.load(f)
+    else:
+        logs = []
+
+    # Neuen Eintrag hinzufügen
+    logs.append(entry)
+
+    # Zurückschreiben
+    with open(MONITOR_LOG, "w") as f:
+        json.dump(logs, f, indent = 4)
+
+# === 4. Modelle evaluieren ===
+def evaluate_models(db:Session):
+    """Führt beide Modelle aus und speichert die Ergebnisse im Log"""
+
+    timestamp = datetime.now().isoformat()
+
+    # Anomalie-Ergebnisse holen
+    anomaly_result = detect_anomalies(db)
+    total_products = anomaly_result["total_items"]
+    anomalies_found = anomaly_result["anomaly_count"]
+    anomaly_ratio = anomalies_found / total_products if total_products > 0 else 0
+
+    # Cluster-Ergebnisse holen
+    cluster_result = cluster_suppliers(db)
+    total_suppliers = cluster_result["total_suppliers"]
+
+    # Log-Eintrag erstellen
+    log_entry = {
+        "timestamp": timestamp,
+        "anomaly_detection": {
+            "total_products": total_products,
+            "anomalies_found": anomalies_found,
+            "anomaly_ratio": round(anomaly_ratio, 4)
+        },
+        "clustering": {
+            "total_suppliers": total_suppliers,
+            "n_clusters": cluster_result["n_clusters"]
+        }
+    }
+
+    # Log speichern
+    _save_log_entry(log_entry)
+
+    return log_entry
